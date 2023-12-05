@@ -1,0 +1,113 @@
+﻿@page "/draw"
+@rendermode InteractiveWebAssembly
+
+@using Blazor.Extensions
+@using Blazor.Extensions.Canvas.Canvas2D
+
+@inject IJSRuntime JsRuntime;
+
+<div id="canvasContainer" style="position: fixed; width: 25%; height: 20%">
+    <BECanvas @ref="_canvasReference"/>
+</div>
+
+<script type="text/javascript">
+    function gameLoop(timeStamp) {
+        window.requestAnimationFrame(gameLoop);
+        game.instance.invokeMethodAsync('GameLoop', timeStamp);
+    }
+
+    function onResize() {
+        if (!window.game.canvas) {
+            return;
+        }
+        var canvasContainer = document.getElementById('canvasContainer');
+        window.game.canvas.width = canvasContainer.clientWidth;
+        window.game.canvas.height = canvasContainer.clientHeight;
+
+        window.game.instance.invokeMethodAsync('OnResize', game.canvas.width, game.canvas.height);
+    }
+
+    window.gameWindowResize = (instance) => {
+        onResize();
+    }
+
+    window.initGame = (instance) => {
+        var canvasContainer = document.getElementById('canvasContainer'),
+            canvases = canvasContainer.getElementsByTagName('canvas') || [];
+        window.game = {
+            instance: instance,
+            canvas: canvases.length ? canvases[0] : null
+        };
+
+        if (window.game.canvas) {
+            window.game.canvas.onmousemove = (e) => {
+                game.instance.invokeMethodAsync('OnMouseMove', e.offsetX, e.offsetY);
+            };
+            window.game.canvas.onmousedown = (e) => {
+                game.instance.invokeMethodAsync('OnMouseDown', e.button);
+            };
+            window.game.canvas.onmouseup = (e) => {
+                game.instance.invokeMethodAsync('OnMouseUp', e.button);
+            };
+        }
+
+        window.addEventListener("resize", onResize);
+
+        window.requestAnimationFrame(gameLoop);
+    }
+</script>
+
+@code {
+    protected BECanvasComponent _canvasReference;
+    private DrawingManager drawingManager;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
+
+            drawingManager = await DrawingManager.Create(_canvasReference);
+
+            var score = new ScoreCount(drawingManager) { OriginPosition = new Point { X = 0, Y = 10 } };
+            score.NewRectangle();
+
+            drawingManager.objectsToDraw.Add(score);
+
+            await JsRuntime.InvokeAsync<object>("gameWindowResize", DotNetObjectReference.Create(this));
+        }
+    }
+
+    [JSInvokable]
+    public async ValueTask GameLoop(double timeStamp)
+    {
+        if (drawingManager is null) return;
+        await drawingManager.RenderFrame(timeStamp);
+    }
+
+    [JSInvokable]
+    public async ValueTask OnResize(int screenWidth, int screenHeight)
+    {
+        if (drawingManager is null) return;
+        drawingManager.bounds = (screenWidth, screenHeight);
+    }
+
+    [JSInvokable]
+    public async ValueTask OnMouseMove(int mouseX, int mouseY)
+    {
+        InputSystem.Instance.MouseCoords.X = mouseX;
+        InputSystem.Instance.MouseCoords.Y = mouseY;
+    }
+
+    [JSInvokable]
+    public async ValueTask OnMouseDown(MouseButtons button)
+    {
+        InputSystem.Instance.SetButtonState(button, ButtonStates.Down);
+    }
+
+    [JSInvokable]
+    public async ValueTask OnMouseUp(MouseButtons button)
+    {
+        InputSystem.Instance.SetButtonState(button, ButtonStates.Up);
+    }
+}
