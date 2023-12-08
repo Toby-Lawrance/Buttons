@@ -6,9 +6,15 @@
 
 @inject IJSRuntime JsRuntime;
 
-<div id="canvasContainer" style="position: fixed; width: 25%; height: 20%">
+<div id="canvasContainer" style="width: 500px; height: 500px">
     <BECanvas @ref="_canvasReference"/>
 </div>
+
+<div id="editorContainer" style="width: 500px; height: 600px">
+    <BlocklyEditor></BlocklyEditor>
+</div>
+
+
 
 <script type="text/javascript">
     function gameLoop(timeStamp) {

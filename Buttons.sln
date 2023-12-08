@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ButtonsWebClientServer", "B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ButtonsWebClient", "ButtonsWebClient\ButtonsWebClient\ButtonsWebClient.csproj", "{13B1D202-D0D8-4402-AEE8-93EC4CEECE01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ButtonsGameServer", "ButtonsGameServer\ButtonsGameServer.csproj", "{4D3DFBDF-BEA6-4A19-B02D-2F35BC2DAC8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{13B1D202-D0D8-4402-AEE8-93EC4CEECE01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13B1D202-D0D8-4402-AEE8-93EC4CEECE01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13B1D202-D0D8-4402-AEE8-93EC4CEECE01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D3DFBDF-BEA6-4A19-B02D-2F35BC2DAC8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D3DFBDF-BEA6-4A19-B02D-2F35BC2DAC8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D3DFBDF-BEA6-4A19-B02D-2F35BC2DAC8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D3DFBDF-BEA6-4A19-B02D-2F35BC2DAC8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

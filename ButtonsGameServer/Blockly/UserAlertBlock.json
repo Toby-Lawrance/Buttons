@@ -1,0 +1,15 @@
+[{
+  "type": "useralert",
+  "message0": "User Alert API %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "msg",
+      "check": "String"
+    }
+  ],
+  "output": "String",
+  "colour": 240,
+  "tooltip": "UserAlert",
+  "helpUrl": ""
+}]
